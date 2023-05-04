@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  rng:
+    platform: linux/amd64
+    image: 'humboldtux/dockercoins_rng:latest'
+    ports:
+      - '8090:80'
+
+  hasher:
+    platform: linux/amd64
+    image: 'humboldtux/dockercoins_hasher:latest'
+    ports:
+      - '8091:80'
+
+  webui:
+    platform: linux/amd64
+    image: 'humboldtux/dockercoins_webui:latest'
+    ports:
+      - '8092:80'
+    volumes:
+      - './webui/files:/files'
+
+  redis:
+    platform: linux/amd64
+    image: 'redis'
+    ports:
+      - '8093:80'
+
+  worker:
+    platform: linux/amd64
+    image: 'humboldtux/dockercoins_worker:latest'
+    depends_on:
+      - 'redis'
+      - 'rng'
+      - 'hasher'
+
